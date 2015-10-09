@@ -26,11 +26,13 @@ namespace Worldpay.Sdk.Examples
             var form = HttpContext.Current.Request.Form;
             var orderType = (OrderType)Enum.Parse(typeof(OrderType), form["orderType"]);
 
-            if (orderType == OrderType.APM) {
+            if (orderType == OrderType.APM)
+            {
                 createAPMOrder();
                 return;
             }
-            else {
+            else
+            {
                 createOrder();
                 return;
             }
@@ -149,7 +151,11 @@ namespace Worldpay.Sdk.Examples
                             value = "customer-ref"
                         }
                     },
-                customerOrderCode = "A123"
+                customerOrderCode = "A123",
+                successUrl = form["successUrl"],
+                failureUrl = form["failureUrl"],
+                pendingUrl = form["pendingUrl"],
+                cancelUrl = form["cancelUrl"]
             };
 
             try
@@ -197,9 +203,7 @@ namespace Worldpay.Sdk.Examples
             StringBuilder sb = new StringBuilder();
             sb.Append("<html>");
             sb.Append("<body>");
-            sb.AppendFormat("<script>\n" +
-                "window.location.replace(\" {0} \");" +
-                      "</script>", response.redirectURL);
+            sb.AppendFormat("<script>\n" + "window.location.replace(\" {0} \");" + "</script>", response.redirectURL);
             sb.Append("</body>");
             sb.Append("</html>");
 

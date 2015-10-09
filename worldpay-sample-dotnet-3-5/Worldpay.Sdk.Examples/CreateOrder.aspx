@@ -158,6 +158,8 @@
             </div>
 
             <div class="apmName apm"></div>
+
+            <input name="successUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmSuccess.aspx");%>' />
             <input name="env" type="hidden" value=""/>
             <div>
                 <asp:Button ID="PlaceOrder" runat="server" Text="Place Order" />

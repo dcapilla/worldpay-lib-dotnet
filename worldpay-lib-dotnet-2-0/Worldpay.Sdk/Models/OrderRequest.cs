@@ -49,5 +49,14 @@ namespace Worldpay.Sdk.Models
         }
 
         public bool is3DSOrder { get; set; }
+
+        public string successUrl { get; set; }
+
+        public string failureUrl { get; set; }
+
+        public string cancelUrl { get; set; }
+
+        public string pendingUrl { get; set; }
+
     }
 }
