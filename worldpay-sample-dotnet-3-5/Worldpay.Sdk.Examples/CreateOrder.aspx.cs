@@ -139,6 +139,7 @@ namespace Worldpay.Sdk.Examples
             var request = new OrderRequest()
             {
                 token = form["token"],
+                name = form["name"],
                 orderDescription = form["description"],
                 amount = (int)(Convert.ToDecimal(form["amount"]) * 100),
                 currencyCode = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), form["currency"]),
@@ -222,7 +223,6 @@ namespace Worldpay.Sdk.Examples
             sb.AppendFormat("<form name='submitForm' action='{0}' method='post'>", response.redirectURL);
             sb.AppendFormat("<input type='hidden' name='PaReq' value='{0}'>", response.oneTime3DsToken);
             sb.AppendFormat("<input type='hidden' name='TermUrl' id='termUrl' value='{0}'>", response.redirectURL);
-            sb.AppendFormat("<input type='hidden' name='TermUrl' id='termUrl' value='{0}'>", "");
             sb.Append("<script>\n" +
                       "  document.getElementById('termUrl').value =\n" +
                       "  window.location.href.replace('CreateOrder', 'AuthorizeOrder');" +

@@ -4,7 +4,7 @@
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder" runat="server">
     <script type="text/javascript" src="<%= Session["js_endpoint"] %>"></script>
-    <form id="paymentForm" runat="server">
+    <form id="aspnetForm" runat="server">
         <h1>.NET 2.0 Library Create Order Example</h1>
             
         <asp:Panel runat="server" ID="RequestPanel">
@@ -84,7 +84,7 @@
             </div>
 
 
-            <div class="form-row">
+            <div class="form-row reusable-token-row">
                 <label>Reusable Token</label>
                 <input type="checkbox" id="chkReusable" />
             </div>
@@ -160,6 +160,10 @@
             <div class="apmName apm"></div>
 
             <input name="successUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmSuccess.aspx");%>' />
+            <input name="failureUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmFailure.aspx");%>' />
+            <input name="cancelUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmCancel.aspx");%>' />
+            <input name="pendingUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmPending.aspx");%>' />
+
             <input name="env" type="hidden" value=""/>
             <div>
                 <asp:Button ID="PlaceOrder" runat="server" Text="Place Order" />
@@ -181,15 +185,6 @@
         Worldpay.setClientKey('<%= Session["client_key"] %>');
         Worldpay.api_path = '<%= Session["apiendpoint"] %>';
 
-        $('#chkReusable').change(function () {
-            if ($(this).is(':checked')) {
-                Worldpay.reusable = true;
-            }
-            else {
-                Worldpay.reusable = false;
-            }
-        });
-
         // This is required as .NET 2.0 doesn't have ClientIDMode="static", so we can't set the form's id to anything
         // other than "aspnetForm"
         var form = document.getElementById('aspnetForm');
@@ -204,6 +199,17 @@
             }
 
         });
+
+        $('#chkReusable').prop('checked', false);
+        $('#chkReusable').change(function () {
+            if ($(this).is(':checked') && $('#apm-name').val() != 'giropay') {
+                Worldpay.reusable = true;
+            }
+            else {
+                Worldpay.reusable = false;
+            }
+        });
+
 
         $('#orderType').on('change', function () {
             if ($(this).val() == 'APM') {
@@ -249,6 +255,9 @@
 
                 //Reusable token option is not available for Giropay
                 $('.reusable-token-row').hide();
+
+                //Set acceptance currency to EUR
+                $('#currency').val('EUR');
             }
             else {
                 //we don't want to send swift code to the api if the apm is not Giropay
@@ -259,6 +268,9 @@
                 //language code enabled by default
                 $('#language-code').attr('data-worldpay', 'language-code');
                 $('.language-code-row').show();
+
+                //Set acceptance currency to GBP
+                $('#currency').val('GBP');
             }
         });
     </script>

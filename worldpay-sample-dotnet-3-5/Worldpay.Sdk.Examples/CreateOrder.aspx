@@ -84,7 +84,7 @@
             </div>
 
 
-            <div class="form-row">
+            <div class="form-row reusable-token-row">
                 <label>Reusable Token</label>
                 <input type="checkbox" id="chkReusable" />
             </div>
@@ -160,6 +160,10 @@
             <div class="apmName apm"></div>
 
             <input name="successUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmSuccess.aspx");%>' />
+            <input name="failureUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmFailure.aspx");%>' />
+            <input name="cancelUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmCancel.aspx");%>' />
+            <input name="pendingUrl" type="hidden" value='<%Response.Write( Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/apmPending.aspx");%>' />
+
             <input name="env" type="hidden" value=""/>
             <div>
                 <asp:Button ID="PlaceOrder" runat="server" Text="Place Order" />
@@ -181,8 +185,9 @@
         Worldpay.setClientKey('<%= Session["client_key"] %>');
         Worldpay.api_path = '<%= Session["apiEndpoint"] %>';
 
+        $('#chkReusable').prop('checked', false);
         $('#chkReusable').change(function () {
-            if ($(this).is(':checked')) {
+            if ($(this).is(':checked') && $('#apm-name').val() != 'giropay') {
                 Worldpay.reusable = true;
             }
             else {
@@ -247,6 +252,9 @@
 
                 //Reusable token option is not available for Giropay
                 $('.reusable-token-row').hide();
+
+                //Set acceptance currency to EUR
+                $('#currency').val('EUR');
             }
             else {
                 //we don't want to send swift code to the api if the apm is not Giropay
@@ -257,6 +265,9 @@
                 //language code enabled by default
                 $('#language-code').attr('data-worldpay', 'language-code');
                 $('.language-code-row').show();
+
+                //Set acceptance currency to GBP
+                $('#currency').val('GBP');
             }
         });
 

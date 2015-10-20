@@ -1,22 +1,18 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Worldpay.Sdk.Json;
 
 namespace Worldpay.Sdk.Models
 {
-    [DataContract, Serializable]
-    public class PaymentResponse : AbstractCard
+    [DataContract]
+    public class APMRequest : AbstractPaymentMethod
     {
         [DataMember]
-        public string cardType { get; set; }
+        public string apmName { get; set; }
 
         [DataMember]
-        public string maskedCardNumber { get; set; }
-
-        [DataMember]
-        public Address billingAddress { get; set; }
+        public string shopperCountryCode { get; set; }
 
         [DataMember, JsonConverter(typeof(EntryConverter))]
         public List<Entry> apmFields { get; set; }
